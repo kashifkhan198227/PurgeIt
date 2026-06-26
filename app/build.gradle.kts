@@ -31,7 +31,8 @@ android {
             storeFile = System.getenv("KEYSTORE_PATH")?.let { file(it) }
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEY_PASSWORD")
+            // PKCS12 (Java 17 keytool default) uses storePassword for keys; KEY_PASSWORD is ignored
+            keyPassword = System.getenv("KEYSTORE_PASSWORD")
         }
     }
 
