@@ -20,6 +20,7 @@ navigation = "2.8.4"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.9.3" }
 androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.0.1" }
+material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
 
 # Compose BOM
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
