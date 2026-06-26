@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.storage.StorageStatsManager
+import android.app.usage.StorageStatsManager
 import com.purgeit.android.data.local.dao.PinnedAppDao
 import com.purgeit.android.data.local.entity.PinnedAppEntity
 import com.purgeit.android.domain.model.AppInfo
