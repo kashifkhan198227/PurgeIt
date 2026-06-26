@@ -7,7 +7,7 @@ import com.purgeit.android.domain.repository.SubscriptionRepository
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
-import com.revenuecat.purchases.interfaces.GetCustomerInfoCallback
+import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +27,7 @@ class SubscriptionRepositoryImpl @Inject constructor() : SubscriptionRepository 
         Purchases.sharedInstance.updatedCustomerInfoListener = listener
 
         // Emit current status immediately
-        Purchases.sharedInstance.getCustomerInfo(object : GetCustomerInfoCallback {
+        Purchases.sharedInstance.getCustomerInfo(object : ReceiveCustomerInfoCallback {
             override fun onReceived(customerInfo: CustomerInfo) {
                 trySend(customerInfo.toSubscriptionStatus())
             }
@@ -43,7 +43,7 @@ class SubscriptionRepositoryImpl @Inject constructor() : SubscriptionRepository 
 
     override suspend fun getSubscriptionStatus(): SubscriptionStatus =
         suspendCancellableCoroutine { cont ->
-            Purchases.sharedInstance.getCustomerInfo(object : GetCustomerInfoCallback {
+            Purchases.sharedInstance.getCustomerInfo(object : ReceiveCustomerInfoCallback {
                 override fun onReceived(customerInfo: CustomerInfo) {
                     cont.resume(customerInfo.toSubscriptionStatus())
                 }

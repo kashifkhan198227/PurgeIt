@@ -1,11 +1,12 @@
 package com.purgeit.android.data.repository
 
+import android.app.usage.StorageStatsManager
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.storage.StorageStatsManager
+import androidx.annotation.RequiresApi
 import com.purgeit.android.data.local.dao.PinnedAppDao
 import com.purgeit.android.data.local.entity.PinnedAppEntity
 import com.purgeit.android.domain.model.AppInfo
@@ -29,6 +30,7 @@ class AppRepositoryImpl @Inject constructor(
     private val packageManager: PackageManager get() = context.packageManager
     private val usageStatsManager: UsageStatsManager
         get() = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+    @get:RequiresApi(Build.VERSION_CODES.O)
     private val storageStatsManager: StorageStatsManager
         get() = context.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
 
@@ -80,14 +82,17 @@ class AppRepositoryImpl @Inject constructor(
             .mapNotNull { appInfo ->
                 runCatching {
                     val stats = usageStats[appInfo.packageName]
-                    val sizeBytes = try {
-                        val storageUuid = appInfo.storageUuid
-                        storageStatsManager.queryStatsForPackage(
-                            storageUuid,
-                            appInfo.packageName,
-                            android.os.Process.myUserHandle()
-                        ).appBytes
-                    } catch (e: Exception) {
+                    val sizeBytes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        try {
+                            storageStatsManager.queryStatsForPackage(
+                                appInfo.storageUuid,
+                                appInfo.packageName,
+                                android.os.Process.myUserHandle()
+                            ).appBytes
+                        } catch (e: Exception) {
+                            0L
+                        }
+                    } else {
                         0L
                     }
 
