@@ -44,6 +44,15 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > purgeit.jks
           ls -la purgeit.jks
+          echo "Keystore size: $(wc -c < purgeit.jks) bytes"
+
+      - name: Verify keystore credentials
+        run: |
+          keytool -list -keystore purgeit.jks \
+            -storepass "${{ secrets.STORE_PASSWORD }}" \
+            -alias "${{ secrets.KEY_ALIAS }}" \
+            -J-Dfile.encoding=UTF-8
+          echo "Keystore verification passed"
 
       - name: Build release AAB
         env:
