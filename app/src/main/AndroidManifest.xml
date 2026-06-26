@@ -31,7 +31,6 @@
     <!-- Foreground service — paired with persistent notification as required.
          Type declared explicitly to avoid ANR on Android 14+ (API 34+). -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <!-- Boot receiver — used only to restart legitimate scheduled scans (Premium).
          NOT used for ads or re-engagement. -->
@@ -77,7 +76,8 @@
         <service
             android:name=".data.service.StorageScanService"
             android:exported="false"
-            android:foregroundServiceType="dataSync" />
+            android:foregroundServiceType="specialUse"
+            android:permission="android.permission.FOREGROUND_SERVICE" />
 
         <!-- Boot receiver — restarts scheduled scans only -->
         <receiver
