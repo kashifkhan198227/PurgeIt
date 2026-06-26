@@ -31,7 +31,7 @@ android {
             storeFile = System.getenv("KEYSTORE_PATH")?.let { file(it) }
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEY_PASSWORD")
+            keyPassword = System.getenv("KEYSTORE_PASSWORD") // PKCS12: key password == store password
         }
     }
 
