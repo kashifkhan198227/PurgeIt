@@ -42,8 +42,12 @@ jobs:
 
       - name: Decode release keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > purgeit.jks
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d ' \n\r\t' | base64 --decode > purgeit.jks
           ls -la purgeit.jks
+
+      - name: Verify keystore
+        run: |
+          keytool -list -keystore purgeit.jks -storepass "${{ secrets.STORE_PASSWORD }}" -noprompt && echo "Keystore OK" || echo "Keystore password mismatch"
 
       - name: Build release AAB
         env:
