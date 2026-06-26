@@ -42,23 +42,8 @@ jobs:
 
       - name: Decode release keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d ' \n\r' | base64 --decode > purgeit.jks
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > purgeit.jks
           ls -la purgeit.jks
-          echo "Keystore size: $(wc -c < purgeit.jks) bytes"
-
-      - name: Verify keystore credentials
-        run: |
-          keytool -list -keystore purgeit.jks \
-            -storepass "${{ secrets.STORE_PASSWORD }}" \
-            -alias "${{ secrets.KEY_ALIAS }}" \
-            -J-Dfile.encoding=UTF-8
-          echo "Store password OK"
-          keytool -exportcert -keystore purgeit.jks \
-            -storepass "${{ secrets.STORE_PASSWORD }}" \
-            -alias "${{ secrets.KEY_ALIAS }}" \
-            -keypass "${{ secrets.KEY_PASSWORD }}" \
-            -file /dev/null
-          echo "Key password OK"
 
       - name: Build release AAB
         env:
@@ -68,6 +53,11 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           REVENUECAT_API_KEY: ${{ secrets.REVENUECAT_API_KEY }}
         run: gradle bundleRelease --no-daemon --stacktrace
+
+      - name: Build debug APK
+        env:
+          REVENUECAT_API_KEY: ${{ secrets.REVENUECAT_API_KEY }}
+        run: gradle assembleDebug --no-daemon
 
       - name: Remove keystore from runner
         if: always()
@@ -80,12 +70,20 @@ jobs:
           path: app/build/outputs/bundle/release/app-release.aab
           retention-days: 30
 
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: purgeit-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
+
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: |
             app/build/outputs/bundle/release/app-release.aab
+            app/build/outputs/apk/debug/app-debug.apk
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

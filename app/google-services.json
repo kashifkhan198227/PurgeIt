@@ -13,19 +13,16 @@
         }
       },
       "oauth_client": [],
-      "api_key": [{ "current_key": "placeholder_api_key" }],
-      "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:000000000000:android:1111111111111111111111",
-        "android_client_info": {
-          "package_name": "com.purgeit.android.debug"
+      "api_key": [
+        {
+          "current_key": "placeholder_api_key"
         }
-      },
-      "oauth_client": [],
-      "api_key": [{ "current_key": "placeholder_api_key" }],
-      "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     }
   ],
   "configuration_version": "1"
