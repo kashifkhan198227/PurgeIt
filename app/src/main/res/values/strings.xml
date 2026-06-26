@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PurgeIt</string>
+
+    <!-- Notifications -->
+    <string name="scan_channel_name">Storage Scan</string>
+    <string name="scan_in_progress">Scan in progress…</string>
+    <string name="scan_complete_title">Scan Complete</string>
+    <string name="scan_complete_desc">Tap to view results and free up space</string>
+    <string name="low_storage_title">Storage Running Low</string>
+    <string name="low_storage_desc">Free up space now to keep your device running smoothly</string>
+
+    <!-- Suggestions -->
+    <string name="suggestion_clear_cache_title">Clear App Cache</string>
+    <string name="suggestion_clear_cache_desc">Your app caches are using over 500 MB. Clearing them won\'t delete personal data.</string>
+    <string name="suggestion_unused_apps_title">Remove Unused Apps</string>
+    <string name="suggestion_unused_apps_desc">You have apps that haven\'t been opened in 30+ days. Uninstall them to save space.</string>
+    <string name="suggestion_migrate_photos_title">Back Up Photos to Google Photos</string>
+    <string name="suggestion_migrate_photos_desc">Move photos to Google Photos to free local storage without losing your memories.</string>
+</resources>

@@ -1,0 +1,34 @@
+# ── Keystores (NEVER commit these) ──────────────────────────────────────────
+*.jks
+*.keystore
+*.p12
+keystore-b64.txt
+KEYSTORE_SECRETS_SETUP.txt
+
+# ── Secrets ───────────────────────────────────────────────────────────────────
+# google-services.json is committed as a placeholder; CI overwrites with real secret
+local.properties
+
+# ── Android / Gradle ─────────────────────────────────────────────────────────
+.gradle/
+*.iml
+.idea/
+.DS_Store
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+
+# ── Generated ─────────────────────────────────────────────────────────────────
+app/build/
+app/release/
+app/schemas/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/

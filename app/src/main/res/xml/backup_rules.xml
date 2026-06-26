@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude encrypted prefs — these contain sensitive keys -->
+    <exclude domain="sharedpref" path="purgeit_prefs.xml" />
+    <!-- Exclude database — contains scan history; regenerated on next scan -->
+    <exclude domain="database" path="purgeit.db" />
+</full-backup-content>

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(python3 -c ' *)",
+      "PowerShell(npm list -g pdf-parse 2>$null)",
+      "Read(//c/Kashif/Development/Requirment/**)",
+      "Read(//mnt/c/Kashif/Development/**)",
+      "Read(//c/Kashif/**)",
+      "Bash(npm root *)",
+      "Bash(NODE_PATH=__CMDSUB_OUTPUT__ node -e ' *)"
+    ]
+  }
+}
