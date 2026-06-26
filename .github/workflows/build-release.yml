@@ -52,7 +52,13 @@ jobs:
             -storepass "${{ secrets.STORE_PASSWORD }}" \
             -alias "${{ secrets.KEY_ALIAS }}" \
             -J-Dfile.encoding=UTF-8
-          echo "Keystore verification passed"
+          echo "Store password OK"
+          keytool -exportcert -keystore purgeit.jks \
+            -storepass "${{ secrets.STORE_PASSWORD }}" \
+            -alias "${{ secrets.KEY_ALIAS }}" \
+            -keypass "${{ secrets.KEY_PASSWORD }}" \
+            -file /dev/null
+          echo "Key password OK"
 
       - name: Build release AAB
         env:
