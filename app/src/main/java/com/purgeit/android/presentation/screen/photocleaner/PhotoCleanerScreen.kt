@@ -33,14 +33,26 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
@@ -55,6 +67,53 @@ fun PhotoCleanerScreen(
     viewModel: PhotoCleanerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    // Check media permission
+    val mediaPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        Manifest.permission.READ_MEDIA_IMAGES else Manifest.permission.READ_EXTERNAL_STORAGE
+
+    var hasPermission by remember {
+        mutableStateOf(ContextCompat.checkSelfPermission(context, mediaPermission) == PackageManager.PERMISSION_GRANTED)
+    }
+    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        hasPermission = granted
+        if (granted && uiState.photoGroups.isEmpty() && !uiState.isScanning) viewModel.scan()
+    }
+
+    LaunchedEffect(hasPermission) {
+        if (hasPermission && uiState.photoGroups.isEmpty() && !uiState.isScanning) viewModel.scan()
+    }
+
+    if (!hasPermission) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Photo Cleaner") },
+                    navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") } },
+                )
+            }
+        ) { padding ->
+            Box(
+                Modifier.fillMaxSize().padding(padding),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.padding(32.dp),
+                ) {
+                    Text("Photo Access Required", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+                    Text("PurgeIt needs access to your photos to find duplicates and low-quality images.", style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    androidx.compose.foundation.layout.Spacer(Modifier.height(8.dp))
+                    Button(onClick = { permissionLauncher.launch(mediaPermission) }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Grant Photo Access")
+                    }
+                }
+            }
+        }
+        return
+    }
 
     if (uiState.showDeleteConfirm) {
         AlertDialog(
