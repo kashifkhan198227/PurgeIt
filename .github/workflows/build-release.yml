@@ -42,7 +42,7 @@ jobs:
 
       - name: Decode release keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > purgeit.jks
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d ' \n\r' | base64 --decode > purgeit.jks
           ls -la purgeit.jks
           echo "Keystore size: $(wc -c < purgeit.jks) bytes"
 
