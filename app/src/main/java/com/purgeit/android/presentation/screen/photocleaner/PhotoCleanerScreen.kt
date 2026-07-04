@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -179,13 +180,24 @@ fun PhotoCleanerScreen(
             modifier = Modifier.fillMaxSize().padding(padding),
         ) {
             if (uiState.isScanning) {
-                LinearProgressIndicator(
-                    progress = { uiState.scanProgress },
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                if (uiState.scanProgress > 0f) {
+                    LinearProgressIndicator(
+                        progress = { uiState.scanProgress },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                } else {
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                }
             }
 
-            if (uiState.groups.isEmpty() && !uiState.isScanning) {
+            if (uiState.isScanning && uiState.groups.isEmpty()) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        CircularProgressIndicator()
+                        Text("Scanning gallery…", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            } else if (uiState.groups.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("Scan your gallery for junk photos")

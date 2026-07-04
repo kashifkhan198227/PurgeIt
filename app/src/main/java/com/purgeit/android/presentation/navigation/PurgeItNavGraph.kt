@@ -18,6 +18,7 @@ import com.purgeit.android.presentation.screen.suggestions.SuggestionsScreen
 fun PurgeItNavGraph(
     navController: NavHostController,
     startDestination: String,
+    onOnboardingComplete: () -> Unit = {},
 ) {
     NavHost(
         navController = navController,
@@ -25,6 +26,7 @@ fun PurgeItNavGraph(
     ) {
         composable(Screen.Onboarding.route) {
             OnboardingScreen(onComplete = {
+                onOnboardingComplete()
                 navController.navigate(Screen.Dashboard.route) {
                     popUpTo(Screen.Onboarding.route) { inclusive = true }
                 }

@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = if (onboardingComplete) Screen.Dashboard.route
                                        else Screen.Onboarding.route,
+                    onOnboardingComplete = viewModel::markOnboardingComplete,
                 )
             }
         }
